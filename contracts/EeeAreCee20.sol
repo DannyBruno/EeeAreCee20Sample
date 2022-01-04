@@ -2,6 +2,7 @@ pragma solidity ^0.8.10;
 
 import "./IERC20.sol";
 import "./SafeMath.sol";
+import "./Random.sol";
 
 contract EeeAreCee20Token is IERC20 {
 	// Use safemath to prevent overflows	
@@ -16,11 +17,14 @@ contract EeeAreCee20Token is IERC20 {
     uint8 private _decimals; // Order of magnitude of wei -> token (1 EeeAreCee20Token == 10 ** (_decimals) wei)
     address _owner;
 
+    // Owner Auth
     modifier isOwner {
     	require (msg.sender == _owner,
             "Only owner may access.");
     	_;
     }
+
+    // Whilelist Auth
 
 	/* Ctor */
 	constructor(string memory name_, string memory symbol_) public {
@@ -97,7 +101,7 @@ contract EeeAreCee20Token is IERC20 {
         emit Transfer(sender, recipient, amount);
 	}
 
-	// Mint when (need auth)
+
     function _mint(address account, uint256 amount) internal virtual isOwner {
         require(account != address(0), "ERC20: mint to the zero address");
         _beforeTokenTransfer(address(0), account, amount);
@@ -106,7 +110,7 @@ contract EeeAreCee20Token is IERC20 {
         emit Transfer(address(0), account, amount);
     }
 
-    // Burn when (need auth)
+
     function _burn(address account, uint256 amount) internal virtual isOwner {
         require(account != address(0), "ERC20: burn from the zero address");
 
@@ -125,13 +129,32 @@ contract EeeAreCee20Token is IERC20 {
         emit Approval(owner, spender, amount);
     }
 
+    /**
+     * @dev Roulette mechanism for increasing/decreasing supply. Meant to demonstrate randomness and mint/burn functions.
+     *
+     * Emits a {Transfer} event upon mint/burn and transfer of winnings if applicable.
+     */
+    function spin(uint8 pick, uint256 amount) public returns (bool) {
+    	require(pick > 0 && pick <=10, "Spin: pick required to be in range [1,10]");
+
+    }
+    
+
+    /**
+     * @dev Divident mechanism. Pays dividend in ETH based on ownership of EeeAreCee20 token. Testing ability to transfer ETH.
+     *
+     */
+    function distributeDividend() public returns (bool) {
+
+    }
+
     /* Hooks */
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { 
     }
 }
 
 
-
+/* how can I make people buy the token? */
 
 
 
